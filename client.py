@@ -10,16 +10,13 @@ load_dotenv()
 
 BUFFER_SIZE = 4096  # send 4096 bytes each time step
 
-# the ip address or hostname of the server, the receiver,
-host = os.environ['MASTER_ADDR']
-port = 5001
-
 
 def connectToServer() -> socket:
-    global host, port, __ID
+    socketHost = os.environ['MASTER_ADDR']
+    socketPort = os.environ['SERVER_PORT']
     s = socket.socket()
-    print(f"[+] Connecting to {host}:{port}")
-    s.connect((host, port))
+    print(f"[+] Connecting to {socketHost}:{socketPort}")
+    s.connect((socketHost, socketPort))
     print("[+] Connected.")
     rank = getMessage(s)
     worldSizeAndEpochs = ast.literal_eval(getMessage(s))
@@ -38,6 +35,8 @@ if __name__ == "__main__":
     """ Initialize the distributed environment. """
     # TODO extract into config
     start = time.time()
+    os.environ['MASTER_ADDR'] = 'server'
+    os.environ['MASTER_PORT'] = 29500
     run(rank, worldSize, epochs)
     end = time.time()
 

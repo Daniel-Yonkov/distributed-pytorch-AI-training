@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import time
 import socket
 from dotenv import load_dotenv
@@ -28,6 +29,8 @@ if __name__ == "__main__":
     """ Initialize the distributed environment. """
     # TODO extract into config
     start = time.time()
+    os.environ['MASTER_ADDR'] = 'server'
+    os.environ['MASTER_PORT'] = 29500
     run(rank, worldSize, epochs)
     end = time.time()
 
