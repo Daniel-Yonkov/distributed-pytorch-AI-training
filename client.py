@@ -35,8 +35,6 @@ def getMessage(connection: socket) -> int:
 
 if __name__ == "__main__":
     (rank, worldSize, epochs) = connectToServer()
-    os.environ['MASTER_ADDR'] = '104.248.135.51'
-    os.environ['MASTER_PORT'] = '29500'
     """ Initialize the distributed environment. """
     # TODO extract into config
     start = time.time()
