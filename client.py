@@ -16,7 +16,7 @@ def connectToServer() -> socket:
     socketPort = os.environ['SERVER_PORT']
     s = socket.socket()
     print(f"[+] Connecting to {socketHost}:{socketPort}")
-    s.connect((socketHost, socketPort))
+    s.connect((socketHost, int(socketPort)))
     print("[+] Connected.")
     rank = getMessage(s)
     worldSizeAndEpochs = ast.literal_eval(getMessage(s))
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # TODO extract into config
     start = time.time()
     os.environ['MASTER_ADDR'] = 'server'
-    os.environ['MASTER_PORT'] = 29500
+    os.environ['MASTER_PORT'] = '29500'
     run(rank, worldSize, epochs)
     end = time.time()
 
