@@ -120,7 +120,6 @@ def sendWorldSizeAndEpochsToPeers(epochs) -> int:
         socket = _getPeerConnection()
         socket.sendall(
             str({"numberOfPeers": numberOfPeers, "epochs": epochs}).encode())
-        time.sleep(3)
         _finishConnectingClient(socket)
     print("World size sent to all peers")
     _closeTCPConnection()
