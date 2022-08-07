@@ -1,3 +1,4 @@
+import os
 import socket
 import time
 import ast
@@ -10,7 +11,7 @@ load_dotenv()
 BUFFER_SIZE = 4096  # send 4096 bytes each time step
 
 # the ip address or hostname of the server, the receiver,
-host = 'server'
+host = os.environ['MASTER_ADDR']
 port = 5001
 
 
