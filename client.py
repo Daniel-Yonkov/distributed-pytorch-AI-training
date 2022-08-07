@@ -37,7 +37,6 @@ if __name__ == "__main__":
     """ Initialize the distributed environment. """
     # TODO extract into config
     start = time.time()
-    print(type(rank), type(worldSize), type(epochs))
     run(rank, worldSize, epochs)
     end = time.time()
 
