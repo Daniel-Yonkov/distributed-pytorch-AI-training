@@ -22,6 +22,8 @@ def awaitClientsConnection(socketConnection: socket, epochs) -> None:
 
 
 if __name__ == "__main__":
+    os.environ['MASTER_ADDR'] = '104.248.135.51'
+    os.environ['MASTER_PORT'] = '29500'
     epochs = 10
     rank = 0  # server rank
     worldSize = awaitClientsConnection(getTCPConnection(), epochs)
