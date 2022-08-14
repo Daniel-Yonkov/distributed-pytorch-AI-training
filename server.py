@@ -25,8 +25,7 @@ if __name__ == "__main__":
     epochs = 10
     rank = 0  # server rank
     worldSize = awaitClientsConnection(getTCPConnection(), epochs)
-    """ Initialize the distributed environment. """
-    # TODO extract into config
+    # Initialize the distributed environment.
     start = time.time()
     run(rank, worldSize, epochs)
     end = time.time()

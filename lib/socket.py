@@ -36,8 +36,6 @@ def getTCPConnection() -> socket:
 def listenForConnections(socketConnection: socket,) -> None:
     # accept connection if there is any
     client_socket, address = socketConnection.accept()
-    # if below code is executed, that means the sender is connected
-    print(f"[+] {address} is connected.")
     rank = storePeerConnection((client_socket, address))
     return (client_socket, rank, address)
 
