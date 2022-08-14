@@ -8,9 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-BUFFER_SIZE = 4096  # send 4096 bytes each time step
-
-
 def connectToServer() -> socket:
     socketHost = os.environ['MASTER_ADDR']
     socketPort = os.environ['SERVER_PORT']
@@ -27,7 +24,8 @@ def connectToServer() -> socket:
 
 
 def getMessage(connection: socket) -> int:
-    global BUFFER_SIZE
+    # send/receive size of 4096 bytes each time step
+    BUFFER_SIZE = 4096
     return connection.recv(BUFFER_SIZE).decode()
 
 
