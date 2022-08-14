@@ -12,7 +12,7 @@ from lib.pytorch.main import run
 load_dotenv()
 
 
-def awaitClientsConnection(socketConnection: socket, epochs) -> None:
+def awaitClientsConnection(socketConnection: socket, epochs) -> int:
     connectionListenerProcess = startConnectionListenerProcess(
         socketConnection)
     allPeersConnectedControlBlock()

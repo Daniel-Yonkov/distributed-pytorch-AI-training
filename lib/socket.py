@@ -32,20 +32,21 @@ def getTCPConnection() -> socket:
     return socketConnection
 
 
-def listenForConnections(socketConnection: socket,) -> None:
+def _listenForConnections(socketConnection: socket,) -> \
+        tuple([socket, str, tuple([str, str])]):
     # accept connection if there is any
     client_socket, address = socketConnection.accept()
-    rank = storePeerConnection((client_socket, address))
+    rank = _storePeerConnection((client_socket, address))
     return (client_socket, rank, address)
 
 
-def storePeerConnection(
-    connectionData: tuple([socket, str])
-) -> None:
+def _storePeerConnection(
+    connectionData: tuple([socket, tuple([str, str])])
+) -> str:
     rank = _peerConnections.qsize() + 1
-    (ip, port) = connectionData[1]
+    socket, (ip, port) = connectionData
     peerConnection = {
-        "socket": connectionData[0],
+        "socket": socket,
         "ip": ip,
         "rank": rank
     }
@@ -53,12 +54,12 @@ def storePeerConnection(
     return rank
 
 
-def hasConnectionsToBeProcessed() -> bool:
+def _hasConnectionsToBeProcessed() -> bool:
     global _peerConnections
     return not _peerConnections.empty()
 
 
-def _finishConnectingClient(con: socket):
+def _terminateClientConnection(con: socket):
     global _peerConnections
     _peerConnections.task_done()
     con.close()
@@ -68,7 +69,7 @@ def startConnectionListenerProcess(
     socketConnection: socket
 ) -> Process:
     p = Process(
-        target=connectionListenerProcess,
+        target=_connectionListener,
         args=[socketConnection]
     )
     p.daemon = True
@@ -76,11 +77,11 @@ def startConnectionListenerProcess(
     return p
 
 
-def connectionListenerProcess(
+def _connectionListener(
     socketConnection: socket,
 ) -> None:
     while True:
-        socket, rank, (ip, port) = listenForConnections(
+        socket, rank, (ip, port) = _listenForConnections(
             socketConnection)
         socket.sendall(str(rank).encode())
         print("[*] Rank:", rank, "connected with ip:", ip, 'and port:', port)
@@ -88,13 +89,16 @@ def connectionListenerProcess(
 
 def sendWorldSizeAndEpochsToPeers(epochs) -> int:
     numberOfPeers = int(_getNumberOfPeers()) + 1  # server included
-    while hasConnectionsToBeProcessed():
+    while _hasConnectionsToBeProcessed():
         socket = _getPeerConnection()
         socket.sendall(
             str({"numberOfPeers": numberOfPeers, "epochs": epochs}).encode())
-        _finishConnectingClient(socket)
+        _terminateClientConnection(socket)
     print("World size sent to all peers")
+    print("Closing shared resources and TCP server")
+    _closeSharedResources()
     _closeTCPConnection()
+    print("Shared resources released and TCP server closed")
     return numberOfPeers
 
 
@@ -109,13 +113,14 @@ def _getPeerConnection() -> socket:
     return peerConnection['socket']
 
 
+def _closeSharedResources() -> None:
+    global _peerConnections
+    _peerConnections.join()
+    _peerConnections.close()
+
+
 def _closeTCPConnection() -> None:
     global _socketConnection
     if(_socketConnection is not None):
-        _stopListeningForConnections()
-
-
-def _stopListeningForConnections() -> None:
-    global _socketConnection
-    _socketConnection.close()
-    _socketConnection = None
+        _socketConnection.close()
+        _socketConnection = None

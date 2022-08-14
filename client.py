@@ -20,8 +20,10 @@ def connectToServer() -> socket:
     print("[+] Connected.")
     rank = getMessage(s)
     worldSizeAndEpochs = ast.literal_eval(getMessage(s))
-    print("rank:", rank, "size:", worldSizeAndEpochs['numberOfPeers'])
-    return (int(rank), int(worldSizeAndEpochs['numberOfPeers']), int(worldSizeAndEpochs['epochs']))
+    worldSize = int(worldSizeAndEpochs['numberOfPeers'])
+    epochs = int(worldSizeAndEpochs['epochs'])
+    print("rank:", rank, "size:", worldSize, "epochs:", epochs)
+    return (int(rank), worldSize, epochs)
 
 
 def getMessage(connection: socket) -> int:
