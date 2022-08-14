@@ -3,7 +3,6 @@ import time
 import os
 from multiprocessing import Process, JoinableQueue
 
-_dbConnection = None
 _socketConnection = None
 _peerConnections = JoinableQueue()
 
@@ -65,34 +64,9 @@ def _finishConnectingClient(con: socket):
     con.close()
 
 
-def finishConnectionProcess():
-    global _peerConnections
-    _peerConnections.join()
-    _closeTCPConnection()
-
-
-def getMessage(connection: socket):
-    BUFFER_SIZE = 4096
-    peerId = connection.recv(BUFFER_SIZE).decode()
-
-    file = bytearray()
-    # Workaround to hanging of socket.recv
-    connection.settimeout(0.01)
-    while True:
-        try:
-            data = connection.recv(BUFFER_SIZE)
-            file.extend(data)
-        except socket.timeout:
-            if len(file) > 0:
-                break
-
-    return (peerId, file)
-
-
 def startConnectionListenerProcess(
     socketConnection: socket
 ) -> Process:
-    global _peerConnections
     p = Process(
         target=connectionListenerProcess,
         args=[socketConnection]
