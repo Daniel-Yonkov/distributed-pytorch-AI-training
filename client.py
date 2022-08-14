@@ -3,6 +3,7 @@ import socket
 import time
 import ast
 from lib.pytorch.main import run
+from lib.socket import getMessage
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,12 +22,6 @@ def connectToServer() -> socket:
     epochs = int(worldSizeAndEpochs['epochs'])
     print("rank:", rank, "size:", worldSize, "epochs:", epochs)
     return (int(rank), worldSize, epochs)
-
-
-def getMessage(connection: socket) -> int:
-    # send/receive size of 4096 bytes each time step
-    BUFFER_SIZE = 4096
-    return connection.recv(BUFFER_SIZE).decode()
 
 
 if __name__ == "__main__":

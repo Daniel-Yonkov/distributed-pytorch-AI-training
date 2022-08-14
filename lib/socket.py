@@ -124,3 +124,9 @@ def _closeTCPConnection() -> None:
     if(_socketConnection is not None):
         _socketConnection.close()
         _socketConnection = None
+
+
+def getMessage(connection: socket) -> int:
+    # receive size of 4096 bytes each time step
+    BUFFER_SIZE = 4096
+    return connection.recv(BUFFER_SIZE).decode()
