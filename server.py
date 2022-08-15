@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import time
+
 import socket
 from dotenv import load_dotenv
 # from torchinfo import summary
@@ -26,8 +26,4 @@ if __name__ == "__main__":
     rank = 0  # server rank
     worldSize = awaitClientsConnection(getTCPConnection(), epochs)
     # Initialize the distributed environment.
-    start = time.time()
     run(rank, worldSize, epochs)
-    end = time.time()
-
-    print("Time to iterate trought", epochs, "epochs:", end - start)

@@ -1,6 +1,5 @@
 import os
 import socket
-import time
 import ast
 from lib.pytorch.main import run
 from lib.socket import getMessage
@@ -26,10 +25,5 @@ def connectToServer() -> socket:
 
 if __name__ == "__main__":
     (rank, worldSize, epochs) = connectToServer()
-    """ Initialize the distributed environment. """
-    # TODO extract into config
-    start = time.time()
+    # Initialize the distributed environment.
     run(rank, worldSize, epochs)
-    end = time.time()
-
-    print("Time to iterate trought", epochs, "epochs:", end - start)
