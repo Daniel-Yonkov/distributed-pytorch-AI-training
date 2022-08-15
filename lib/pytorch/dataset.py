@@ -60,3 +60,14 @@ def partition_dataset() -> tuple([utils.data.DataLoader, int]):
     train_set = utils.data.DataLoader(
         partition, batch_size=int(bsz), shuffle=True)
     return train_set, bsz
+
+
+def testDataset():
+    return datasets.MNIST(
+        './data',
+        train=False,
+        download=True,
+        transform=transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))
+        ]))

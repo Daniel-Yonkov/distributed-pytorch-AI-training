@@ -1,7 +1,7 @@
 import time
 import torch.distributed as dist
-from lib.pytorch.dataset import partition_dataset
-from lib.pytorch.training import trainModel
+from lib.pytorch.dataset import partition_dataset, testDataset
+from lib.pytorch.training import trainModel, test
 
 
 def run(rank, worldSize, epochs, backend='gloo'):
@@ -13,3 +13,4 @@ def run(rank, worldSize, epochs, backend='gloo'):
                        numberOfEpochs=epochs, rank=rank)
     end = time.time()
     print("Time to iterate trought", epochs, "epochs:", end - start)
+    test(model, testDataset())
