@@ -21,8 +21,6 @@ def trainModel(trainSet, batchSize, numberOfEpochs, rank):
             loss.backward()
             average_gradients(model)
             optimizer.step()
-        # Print Model Summary
-        # summary(model, input_size=(64, 1, 28, 28))
         print('Rank ',
               dist.get_rank(), ', epoch ', epoch, ': ',
               epoch_loss / num_batches)

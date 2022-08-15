@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def connectToServer() -> socket:
+def connectToServer() -> tuple([int, int, int]):
     socketHost = os.environ['MASTER_ADDR']
     socketPort = os.environ['SERVER_PORT']
     s = socket.socket()
@@ -17,10 +17,10 @@ def connectToServer() -> socket:
     print("[+] Connected.")
     rank = getMessage(s)
     worldSizeAndEpochs = ast.literal_eval(getMessage(s))
-    worldSize = int(worldSizeAndEpochs['numberOfPeers'])
-    epochs = int(worldSizeAndEpochs['epochs'])
+    worldSize = worldSizeAndEpochs['numberOfPeers']
+    epochs = worldSizeAndEpochs['epochs']
     print("rank:", rank, "size:", worldSize, "epochs:", epochs)
-    return (int(rank), worldSize, epochs)
+    return (int(rank), int(worldSize), int(epochs))
 
 
 if __name__ == "__main__":

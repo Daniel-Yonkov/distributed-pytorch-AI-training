@@ -38,11 +38,11 @@ class DataPartitioner(object):
             self.partitions.append(indexes[0:part_len])
             indexes = indexes[part_len:]
 
-    def use(self, partition):
+    def use(self, partition) -> Partition:
         return Partition(self.data, self.partitions[partition])
 
 
-def partition_dataset():
+def partition_dataset() -> tuple([utils.data.DataLoader, int]):
     """ Partitioning MNIST """
     dataset = datasets.MNIST(
         './data',
