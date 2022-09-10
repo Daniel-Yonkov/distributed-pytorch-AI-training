@@ -52,7 +52,7 @@ def test(model, test_dataset):
 
 def average_gradients(model):
     """ Gradient averaging. """
-    size = float(dist.get_world_size())
+    # size = float(dist.get_world_size())
     for param in model.parameters():
         dist.all_reduce(param.grad.data, op=dist.ReduceOp.SUM)
-        param.grad.data /= size
+        # param.grad.data /= size
